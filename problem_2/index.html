@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <style>
+        #product_table .v-input__slot {
+            padding-left: 0 !important;
+        }
+        #product_table .v-input__prepend-inner {
+            background-color: #eceaea;
+        }
+        #product_table .v-input__prepend-inner {
+            height: 38px;
+            padding: 11px 10px !important;
+            margin-right: 10px !important;
+        }
+        #product_table .v-text-field__details {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <v-app>
+        <v-main>
+            <v-container>
+                <v-card>
+                    <v-card-title>
+                        Inventory
+                    </v-card-title>
+
+                    <v-toolbar
+                            dark
+                            color="blue darken-3"
+                            class="mb-1"
+                    >
+                        <v-text-field
+                                v-model="search"
+                                clearable
+                                flat
+                                solo-inverted
+                                hide-details
+                                prepend-inner-icon="mdi-magnify"
+                                label="Search"
+                                single-line
+                        ></v-text-field>
+                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-data-table
+                            :headers="headers"
+                            :items="products"
+                            :search="search"
+                            id="product_table"
+                    >
+                        <template v-slot:item.updated="{ item }">
+                                {{ (new Date(item.updated)).toLocaleString("en-US") }}
+                        </template>
+                        <template v-slot:item.units="{ item }">
+                            <div class="text-right pr-md-5">
+                                {{ parseInt(item.units).toLocaleString("en-US")}}
+                            </div>
+                        </template>
+                        <template v-slot:item.edit="{ item }">
+                            <v-text-field
+                                    label="Solo"
+                                    solo
+                                    v-model="item.units"
+                                    dense
+                                    type="number"
+                                    @change="update_item(item)"
+                                    @keyup.enter="update_item(item)"
+                            >
+                                <template v-slot:prepend-inner>
+                                    Qty
+                                </template>
+                            </v-text-field>
+                        </template>
+                    </v-data-table>
+                </v-card>
+            </v-container>
+        </v-main>
+    </v-app>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data() {
+            return {
+                search: '',
+                headers: [
+                    {text: 'Item Code', value: 'code'},
+                    {
+                        text: 'Product',
+                        align: 'start',
+                        sortable: false,
+                        value: 'name',
+                    },
+                    {text: 'Package', value: 'package', filterable: false,},
+                    {text: 'Available units', value: 'units', align: 'center', filterable: false,},
+                    {text: 'Category', value: 'category'},
+                    {text: 'Last updated', value: 'updated', filterable: false,},
+                    {text: 'Edit available quantity', value: 'edit', filterable: false,},
+                ],
+                products: [
+                    {
+                        code: 'ACC1',
+                        name: 'Apple',
+                        package: '40 LB',
+                        units: 2423324,
+                        category: 'Fruits',
+                        updated: '2022.02.21',
+                    },
+                    {
+                        code: 'ACC2',
+                        name: 'Banana',
+                        package: '8 CT',
+                        units: 3763147,
+                        category: 'Fruits',
+                        updated: '2022.03.11',
+                    },
+                    {
+                        code: 'ACC3',
+                        name: 'Carrot',
+                        package: '20 LB',
+                        units: 278963423,
+                        category: 'Vegetables',
+                        updated: '2022.03.08',
+                    },
+                    {
+                        code: 'ACC4',
+                        name: 'Radish',
+                        package: '30 LB',
+                        units: 87356345,
+                        category: 'Vegetables',
+                        updated: '2021.12.11',
+                    },
+                    {
+                        code: 'ACC5',
+                        name: 'Eggplant',
+                        package: '10 CT',
+                        units: 5436362,
+                        category: 'Vegetables',
+                        updated: '2021.11.15',
+                    },
+                    {
+                        code: 'ACC6',
+                        name: 'Grapes',
+                        package: '40 LB',
+                        units: 97842874,
+                        category: 'Fruits',
+                        updated: '2021.08.11',
+                    },
+                    {
+                        code: 'ACC7',
+                        name: 'Lemon',
+                        package: '6 CT',
+                        units: 943348,
+                        category: 'Fruits',
+                        updated: '2021.10.19',
+                    },
+                    {
+                        code: 'ACC8',
+                        name: 'Orange',
+                        package: '20 LB',
+                        units: 852623217,
+                        category: 'Fruits',
+                        updated: '2022.01.07',
+                    },
+                    {
+                        code: 'ACC9',
+                        name: 'Tangerine',
+                        package: '30 LB',
+                        units: 554451,
+                        category: 'Fruits',
+                        updated: '2022.03.11',
+                    },
+                    {
+                        code: 'ACC10',
+                        name: 'Watermelon',
+                        package: '50 LB',
+                        units: 6435475,
+                        category: 'Fruits',
+                        updated: '2022.02.11',
+                    },
+                    {
+                        code: 'ACC11',
+                        name: 'Cauliflower',
+                        package: '40 LB',
+                        units: 4894512,
+                        category: 'Vegetables',
+                        updated: '2021.05.11',
+                    },
+                ],
+            }
+        },
+        methods: {
+            update_item(item) {
+                let index = this.products.findIndex(product => product.code === item.code)
+                this.products[index].updated = new Date()
+            }
+        }
+    })
+</script>
+</body>
+</html>
